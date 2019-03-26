@@ -15,13 +15,12 @@ class MatchingGame {
     init(numberOfPairsOfCards: Int){
         for _ in 1...numberOfPairsOfCards{
             let card = Card()
-            
             cards.append(card)
             cards.append(card)
-            //           -> cards += [card, card]
         }
+        
     }
-    
+
     var indexOfOneAndOnlyFaceUpCard: Int?{
         get{
             var foundIndex:Int?
@@ -69,11 +68,5 @@ class MatchingGame {
          }
     }
     
-    func initCard(at index : Int){
-        cards[index].isFaceUp = false
-        cards[index].isMatched = false
-        
-    }
-    
-    
 }
+

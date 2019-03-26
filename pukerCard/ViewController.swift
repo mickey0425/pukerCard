@@ -27,7 +27,10 @@ class ViewController: UIViewController {
     }
     
     var emojiChoise = ["🃏","💀","🔞","💩","🧠","🐷","🦋","🐝"]
+    
     var emoji = Dictionary<Int,String>()
+    
+    lazy var cardId = Array(1...cardbutton.count)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,11 +70,10 @@ class ViewController: UIViewController {
     
     
     func emoji(for card: Card)-> String {
-        print(card.identifier)
+       
         if emoji[card.identifier] == nil , emojiChoise.count > 0 {
             let randomIndex = Int(arc4random_uniform(UInt32(emojiChoise.count)))
             emoji[card.identifier] = emojiChoise.remove(at: randomIndex)
-        print(emojiChoise)
         }
         return emoji[card.identifier] ?? "?"
     }
@@ -82,10 +84,20 @@ class ViewController: UIViewController {
         emoji = Dictionary<Int,String>()
         
         for i in cardbutton.indices{
-          game.initCard(at: i)
-          cardbutton[i].setTitle("",for: UIControl.State.normal)
-          cardbutton[i].backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+           
+            game.cards[i].isFaceUp = false
+            game.cards[i].isMatched = false
+            
+            let randomIndex = Int(arc4random_uniform(UInt32(cardId.count)))
+            print(cardId[randomIndex])
+            game.cards[i].identifier = (cardId[randomIndex]+1)/2
+            cardId.remove(at: randomIndex)
+            print(cardId)
+            cardbutton[i].setTitle("",for: UIControl.State.normal)
+            cardbutton[i].backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
         }
+         print(game.cards)
         count = 0
+        cardId = Array(1...cardbutton.count)
     }
 }
