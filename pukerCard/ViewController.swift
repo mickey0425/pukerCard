@@ -40,12 +40,20 @@ class ViewController: UIViewController {
     @IBAction func touchCard(_ sender: UIButton) {
         if let cardNumber = cardbutton.index(of: sender){
             print("cardNumber = \(String(describing: cardNumber))")
+            
+            let card = game.cards[cardNumber]
+            if !card.isMatched {
+                count += 1
+            }
+            
             game.chooseCard(at: cardNumber)
             updateViewFromModel()
+            
         }else{
             print("not in the collection")
         }
-        count += 1
+        
+//        count += 1
     }
     
     func updateViewFromModel(){
@@ -56,6 +64,8 @@ class ViewController: UIViewController {
             if card.isFaceUp{
                 button.setTitle(emoji(for : card),for: UIControl.State.normal)
                 button.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+                
+
             }else{
                 if card.isMatched{
                     button.setTitle(emoji(for : card),for: UIControl.State.normal)
@@ -63,6 +73,8 @@ class ViewController: UIViewController {
                 }else{
                     button.setTitle("",for: UIControl.State.normal)
                     button.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+                    
+
                 }
             }
         }
@@ -99,5 +111,17 @@ class ViewController: UIViewController {
          print(game.cards)
         count = 0
         cardId = Array(1...cardbutton.count)
+    }
+    
+    
+    @IBAction func flipAll(_ sender: Any) {
+        for index in cardbutton.indices {
+
+            game.cards[index].isFaceUp = false
+            game.cards[index].isMatched = true
+           
+        }
+        updateViewFromModel()
+        count += 16
     }
 }

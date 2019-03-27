@@ -55,6 +55,7 @@ class MatchingGame {
             }else if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex == index{
                 cards[index].isFaceUp = false
                 indexOfOneAndOnlyFaceUpCard = nil
+                
             }
             else{
                 for flipDownIndex in cards.indices {
