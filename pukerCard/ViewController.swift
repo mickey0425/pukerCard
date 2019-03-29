@@ -8,16 +8,19 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     @IBOutlet weak var countLabel: UILabel!
     
     @IBOutlet var cardbutton: [UIButton]!
+    
+    var flipAllCount = 0
     
     lazy var game:MatchingGame =  MatchingGame(numberOfPairsOfCards: numberOfPairsCard)
     
     var numberOfPairsCard: Int{
         return (cardbutton.count+1)/2
     }
+    
     
     var count:Int = 0
     {
@@ -36,14 +39,15 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     }
-
+    
     @IBAction func touchCard(_ sender: UIButton) {
         if let cardNumber = cardbutton.index(of: sender){
             print("cardNumber = \(String(describing: cardNumber))")
             
             let card = game.cards[cardNumber]
             if !card.isMatched {
-                count += 1
+                count = game.calCount(at: 1)
+                //                count += 1
             }
             
             game.chooseCard(at: cardNumber)
@@ -53,7 +57,7 @@ class ViewController: UIViewController {
             print("not in the collection")
         }
         
-//        count += 1
+        
     }
     
     func updateViewFromModel(){
@@ -65,7 +69,7 @@ class ViewController: UIViewController {
                 button.setTitle(emoji(for : card),for: UIControl.State.normal)
                 button.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
                 
-
+                
             }else{
                 if card.isMatched{
                     button.setTitle(emoji(for : card),for: UIControl.State.normal)
@@ -74,7 +78,7 @@ class ViewController: UIViewController {
                     button.setTitle("",for: UIControl.State.normal)
                     button.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
                     
-
+                    
                 }
             }
         }
@@ -82,7 +86,7 @@ class ViewController: UIViewController {
     
     
     func emoji(for card: Card)-> String {
-       
+        
         if emoji[card.identifier] == nil , emojiChoise.count > 0 {
             let randomIndex = Int(arc4random_uniform(UInt32(emojiChoise.count)))
             emoji[card.identifier] = emojiChoise.remove(at: randomIndex)
@@ -96,7 +100,7 @@ class ViewController: UIViewController {
         emoji = Dictionary<Int,String>()
         
         for i in cardbutton.indices{
-           
+            
             game.cards[i].isFaceUp = false
             game.cards[i].isMatched = false
             
@@ -108,20 +112,36 @@ class ViewController: UIViewController {
             cardbutton[i].setTitle("",for: UIControl.State.normal)
             cardbutton[i].backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
         }
-         print(game.cards)
-        count = 0
+        print(game.cards)
+        //        count = 0
+        count = game.calCount(at: 0)
         cardId = Array(1...cardbutton.count)
+        flipAllCount = 0
     }
     
     
     @IBAction func flipAll(_ sender: Any) {
-        for index in cardbutton.indices {
-
-            game.cards[index].isFaceUp = false
-            game.cards[index].isMatched = true
-           
+        print(flipAllCount%2)
+        switch  flipAllCount%2 {
+            
+        case 0:
+            for index in cardbutton.indices {
+                game.cards[index].isFaceUp = true
+                game.cards[index].isMatched = true
+            }
+            flipAllCount += 1
+        case 1:
+            for index in cardbutton.indices {
+                game.cards[index].isFaceUp = false
+                game.cards[index].isMatched = false
+            }
+            flipAllCount += 1
+        default:
+            break
         }
+        
         updateViewFromModel()
-        count += 16
+        //        count = 0
+        count =  game.calCount(at: 0)
     }
 }

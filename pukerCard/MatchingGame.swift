@@ -10,7 +10,7 @@ import Foundation
 
 class MatchingGame {
     
-    var cards = [Card]()
+     var cards = [Card]() //var cards : Array(Card)
     
     init(numberOfPairsOfCards: Int){
         for _ in 1...numberOfPairsOfCards{
@@ -18,9 +18,9 @@ class MatchingGame {
             cards.append(card)
             cards.append(card)
         }
-        
     }
-
+    
+    
     var indexOfOneAndOnlyFaceUpCard: Int?{
         get{
             var foundIndex:Int?
@@ -43,15 +43,15 @@ class MatchingGame {
     }
     
     func chooseCard(at index : Int){
-       
+        
         if !cards[index].isMatched{
             if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
                 if cards[matchIndex].identifier == cards[index].identifier{
-                   cards[matchIndex].isMatched = true
-                   cards[index].isMatched = true
+                    cards[matchIndex].isMatched = true
+                    cards[index].isMatched = true
                 }
                 cards[index].isFaceUp = true
-//              indexOfOneAndOnlyFaceUpCard = nil
+                //              indexOfOneAndOnlyFaceUpCard = nil
             }else if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex == index{
                 cards[index].isFaceUp = false
                 indexOfOneAndOnlyFaceUpCard = nil
@@ -66,8 +66,21 @@ class MatchingGame {
                 cards[index].isFaceUp = true
                 indexOfOneAndOnlyFaceUpCard = index
             }
-         }
+        }
     }
     
+    var count : Int = 0
+    func calCount(at index : Int) -> Int {
+        
+        switch index {
+        case 0:
+             count = 0
+        case 1:
+            count += 1
+        default:
+            break
+        }
+        return count
+    }
 }
 
