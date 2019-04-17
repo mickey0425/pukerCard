@@ -7,6 +7,16 @@
 //
 import UIKit
 
+extension Int{
+    var arc4random:Int{
+        if self>0{
+            return Int(arc4random_uniform(UInt32(self)))
+        }else if self<0{
+            return -Int(arc4random_uniform(UInt32(abs(self))))
+        } else{
+            return 0 }
+    } }
+
 class ViewController: UIViewController {
     
     @IBOutlet weak var countLabel: UILabel!
@@ -15,53 +25,32 @@ class ViewController: UIViewController {
     
     @IBOutlet var cardbutton: [UIButton]!
     
+    //點擊filpALL 次數
     var flipAllCount = 0
-    var themeTopic = ["Animals","Faces","Foods","Sports","Countries","Plants"]
     
-    var emojiChoises = ["","","","","","","",""]
-    var emojiChoise: String = ""
+    var themeTopic = ["Animals","Faces","Foods","Sports","Countries","Plants"]
+   
+    var emojiChoices: String = ""
+//    var emojiChoices = ["",""]
+    
+//    var emoji = Dictionary<Int,String>()
+    var emojiDic = [Card:String]()
+    
+    lazy var cardId = Array(1...cardbutton.count)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        theme = themeTopic[Int(arc4random_uniform(UInt32(themeTopic.count)))]
-        
-        switch theme {
-        case "Animals":
-            emojiChoise = game.emojiChoises.Animals
-            break
-        case "Faces":
-            emojiChoise = game.emojiChoises.Faces
-            break
-        case "Foods":
-            emojiChoise = game.emojiChoises.Foods
-            break
-        case "Sports":
-            emojiChoise = game.emojiChoises.Sports
-            break
-        case "Countries":
-            emojiChoise = game.emojiChoises.Countries
-            break
-        case "Plants":
-            emojiChoise = game.emojiChoises.Plants
-            break
-            
-        default:
-           break
-        }
-        print(emojiChoise)
+        randomEmojiTheme()
     }
     
-    
-    
+    //初始化game 來調用 matchingGame.swift中模組 並傳入卡片編號numberOfPairsOfCards
     lazy var game:MatchingGame =  MatchingGame(numberOfPairsOfCards: numberOfPairsCard)
-    
     
     var numberOfPairsCard: Int{
         return (cardbutton.count+1)/2
     }
      
-    
-    
+    //當前卡片emoji主題
     var theme : String = ""
     {
         didSet{
@@ -69,22 +58,13 @@ class ViewController: UIViewController {
         }
     }
     
+    //點及卡片次數
     var count:Int = 0
     {
         didSet{
             countLabel.text = "count: \(count)"
         }
     }
-    
-   
-    
-    
-    
-    
-    var emoji = Dictionary<Int,String>()
-    
-    lazy var cardId = Array(1...cardbutton.count)
-    
     
     
     @IBAction func touchCard(_ sender: UIButton) {
@@ -114,12 +94,12 @@ class ViewController: UIViewController {
             let card = game.cards[index]
             
             if card.isFaceUp{
-                button.setTitle(emoji(for : card),for: UIControl.State.normal)
+                button.setTitle(getEmoji(for : card),for: UIControl.State.normal)
                 button.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
                 
             }else{
                 if card.isMatched{
-                    button.setTitle(emoji(for : card),for: UIControl.State.normal)
+                    button.setTitle(getEmoji(for : card),for: UIControl.State.normal)
                     button.backgroundColor = #colorLiteral(red: 0.5704585314, green: 0.5704723597, blue: 0.5704649091, alpha: 0.6469659675)
                 }else{
                     button.setTitle("",for: UIControl.State.normal)
@@ -129,23 +109,25 @@ class ViewController: UIViewController {
         }
     }
     
-    
-    func emoji(for card: Card)-> String {
+    private func getEmoji(for card: Card)-> String {
         
-        if emoji[card.identifier] == nil , emojiChoises.count > 0 {
-            let randomIndex = Int(arc4random_uniform(UInt32(emojiChoises.count)))
-            emoji[card.identifier] = emojiChoises.remove(at: randomIndex)
+        if emojiDic[card] == nil , emojiChoices.count > 0 {
+            
+            let randomStringIndex = emojiChoices.index(emojiChoices.startIndex, offsetBy: emojiChoices.count.arc4random)
+            emojiDic[card] = String(emojiChoices.remove(at:randomStringIndex))
         }
-        return emoji[card.identifier] ?? "?"
+        return emojiDic[card] ?? "?"
+        
     }
-    
+
     @IBAction func resetCard(_ sender: Any) {
         
         
-        emojiChoises = ["","","","","","","",""]
-
-        emoji = Dictionary<Int,String>()
+//        emojiChoices = ["","","","","","","",""]
+//        emoji = Dictionary<Int,String>()
         
+        randomEmojiTheme()
+        emojiDic = [Card:String]()
         for i in cardbutton.indices{
             
             game.cards[i].isFaceUp = false
@@ -191,4 +173,36 @@ class ViewController: UIViewController {
         //        count = 0
         count =  game.calCount(at: 0)
     }
+    
+    func randomEmojiTheme() {
+        theme = themeTopic[Int(arc4random_uniform(UInt32(themeTopic.count)))]
+        
+        
+        switch theme {
+        case "Animals":
+            
+            emojiChoices = game.emojiChoices.Animals
+            break
+        case "Faces":
+            emojiChoices = game.emojiChoices.Faces
+            break
+        case "Foods":
+            emojiChoices = game.emojiChoices.Foods
+            break
+        case "Sports":
+            emojiChoices = game.emojiChoices.Sports
+            break
+        case "Countries":
+            emojiChoices = game.emojiChoices.Countries
+            break
+        case "Plants":
+            emojiChoices = game.emojiChoices.Plants
+            break
+            
+        default:
+            break
+        }
+        print(emojiChoices)
+    }
+
 }

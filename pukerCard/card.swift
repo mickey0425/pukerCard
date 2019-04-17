@@ -9,10 +9,18 @@
 import Foundation
 
 struct Card : Hashable{
+    var hashValue: Int {
+        return identifier
+    }
+    static func ==(lhs: Card, rhs: Card) -> Bool {
+        return lhs.identifier == rhs.identifier
+    }
     
     var isFaceUp = false
     var isMatched = false
-    var identifier  : Int      //use ID , not emoji
+    var identifier:Int
+    
+    
     static var  identifierFactory = 0
     static func getUniqueIdentifier()->Int{
         identifierFactory += 1
@@ -21,7 +29,12 @@ struct Card : Hashable{
     init(){
         self.identifier = Card.getUniqueIdentifier()
     }
+
 }
+
+
+
+
 
 
 class emojiTheme {
@@ -32,6 +45,8 @@ class emojiTheme {
     var Countries = "🇹🇼🇯🇵🇧🇪🇮🇸🇨🇦🇦🇷🇺🇸🇰🇷"
     var Plants = "🌻🍄🌵🌹🍀🌴🌳🎋"
 }
+
+
 
 
 

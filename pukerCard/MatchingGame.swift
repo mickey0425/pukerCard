@@ -12,12 +12,9 @@ class MatchingGame {
     
     var cards = [Card]() //var cards : Array(Card)
     
-    
-    var emojiChoises = emojiTheme()
-   
+    var emojiChoices = emojiTheme()
     
    
-    
     init(numberOfPairsOfCards: Int){
         for _ in 1...numberOfPairsOfCards{
             let card = Card()
@@ -27,10 +24,6 @@ class MatchingGame {
         
        
     }
-    
-    
-   
-    
     
     var indexOfOneAndOnlyFaceUpCard: Int?{
         get{
@@ -53,32 +46,50 @@ class MatchingGame {
         }
     }
     
-    func chooseCard(at index : Int){
-        
+    func chooseCard(at index:Int) {
         if !cards[index].isMatched{
-            if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
-                if cards[matchIndex].identifier == cards[index].identifier{
-                    cards[matchIndex].isMatched = true
-                    cards[index].isMatched = true
-                }
-                cards[index].isFaceUp = true
-                //              indexOfOneAndOnlyFaceUpCard = nil
-            }else if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex == index{
-                cards[index].isFaceUp = false
-                indexOfOneAndOnlyFaceUpCard = nil
-                
-            }
-            else{
-                for flipDownIndex in cards.indices {
-                    if !cards[flipDownIndex].isMatched{
-                        cards[flipDownIndex].isFaceUp = false
+            if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index
+                {
+                    if cards[matchIndex] == cards[index] {
+                        cards[matchIndex].isMatched = true
+                        cards[index].isMatched = true
                     }
-                }
-                cards[index].isFaceUp = true
+                    cards[index].isFaceUp = true
+            }else{
                 indexOfOneAndOnlyFaceUpCard = index
+                
             }
         }
     }
+            
+
+    
+//    func chooseCard(at index : Int){
+//
+//        if !cards[index].isMatched{
+//            if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
+//                if cards[matchIndex].identifier == cards[index].identifier{
+//                    cards[matchIndex].isMatched = true
+//                    cards[index].isMatched = true
+//                }
+//                cards[index].isFaceUp = true
+//                //              indexOfOneAndOnlyFaceUpCard = nil
+//            }else if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex == index{
+//                cards[index].isFaceUp = false
+//                indexOfOneAndOnlyFaceUpCard = nil
+//
+//            }
+//            else{
+//                for flipDownIndex in cards.indices {
+//                    if !cards[flipDownIndex].isMatched{
+//                        cards[flipDownIndex].isFaceUp = false
+//                    }
+//                }
+//                cards[index].isFaceUp = true
+//                indexOfOneAndOnlyFaceUpCard = index
+//            }
+//        }
+//    }
     
     var count : Int = 0
     func calCount(at index : Int) -> Int {
