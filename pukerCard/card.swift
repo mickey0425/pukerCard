@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Card {
+struct Card : Hashable{
     
     var isFaceUp = false
     var isMatched = false
@@ -22,6 +22,18 @@ struct Card {
         self.identifier = Card.getUniqueIdentifier()
     }
 }
+
+
+class emojiTheme {
+    var Animals = "🐸🐧🐝🐼🦋🦕🦑🦍"
+    var Faces = "🤬😤💀👺😭🤡😎🤖"
+    var Foods = "🍌🍟🍔🍤🍣🍖🍉🥗"
+    var Sports = "⚽️🏀🎾🏸🏓🎱🚴🏻‍♂️🏊🏻‍♀️"
+    var Countries = "🇹🇼🇯🇵🇧🇪🇮🇸🇨🇦🇦🇷🇺🇸🇰🇷"
+    var Plants = "🌻🍄🌵🌹🍀🌴🌳🎋"
+}
+
+
 
 
 

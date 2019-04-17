@@ -11,16 +11,63 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var countLabel: UILabel!
     
+    @IBOutlet weak var themeLabel: UILabel!
+    
     @IBOutlet var cardbutton: [UIButton]!
     
     var flipAllCount = 0
+    var themeTopic = ["Animals","Faces","Foods","Sports","Countries","Plants"]
+    
+    var emojiChoises = ["","","","","","","",""]
+    var emojiChoise: String = ""
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        theme = themeTopic[Int(arc4random_uniform(UInt32(themeTopic.count)))]
+        
+        switch theme {
+        case "Animals":
+            emojiChoise = game.emojiChoises.Animals
+            break
+        case "Faces":
+            emojiChoise = game.emojiChoises.Faces
+            break
+        case "Foods":
+            emojiChoise = game.emojiChoises.Foods
+            break
+        case "Sports":
+            emojiChoise = game.emojiChoises.Sports
+            break
+        case "Countries":
+            emojiChoise = game.emojiChoises.Countries
+            break
+        case "Plants":
+            emojiChoise = game.emojiChoises.Plants
+            break
+            
+        default:
+           break
+        }
+        print(emojiChoise)
+    }
+    
+    
     
     lazy var game:MatchingGame =  MatchingGame(numberOfPairsOfCards: numberOfPairsCard)
+    
     
     var numberOfPairsCard: Int{
         return (cardbutton.count+1)/2
     }
+     
     
+    
+    var theme : String = ""
+    {
+        didSet{
+            themeLabel.text = " Theme : \(theme) "
+        }
+    }
     
     var count:Int = 0
     {
@@ -29,18 +76,19 @@ class ViewController: UIViewController {
         }
     }
     
-    var emojiChoise = ["🃏","💀","🔞","💩","🧠","🐷","🦋","🐝"]
+   
+    
+    
+    
     
     var emoji = Dictionary<Int,String>()
     
     lazy var cardId = Array(1...cardbutton.count)
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
+    
     
     @IBAction func touchCard(_ sender: UIButton) {
+    
         if let cardNumber = cardbutton.index(of: sender){
             print("cardNumber = \(String(describing: cardNumber))")
             
@@ -69,7 +117,6 @@ class ViewController: UIViewController {
                 button.setTitle(emoji(for : card),for: UIControl.State.normal)
                 button.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
                 
-                
             }else{
                 if card.isMatched{
                     button.setTitle(emoji(for : card),for: UIControl.State.normal)
@@ -77,8 +124,6 @@ class ViewController: UIViewController {
                 }else{
                     button.setTitle("",for: UIControl.State.normal)
                     button.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
-                    
-                    
                 }
             }
         }
@@ -87,16 +132,18 @@ class ViewController: UIViewController {
     
     func emoji(for card: Card)-> String {
         
-        if emoji[card.identifier] == nil , emojiChoise.count > 0 {
-            let randomIndex = Int(arc4random_uniform(UInt32(emojiChoise.count)))
-            emoji[card.identifier] = emojiChoise.remove(at: randomIndex)
+        if emoji[card.identifier] == nil , emojiChoises.count > 0 {
+            let randomIndex = Int(arc4random_uniform(UInt32(emojiChoises.count)))
+            emoji[card.identifier] = emojiChoises.remove(at: randomIndex)
         }
         return emoji[card.identifier] ?? "?"
     }
     
     @IBAction func resetCard(_ sender: Any) {
         
-        emojiChoise = ["🃏","💀","🔞","💩","🧠","🐷","🦋","🐝"]
+        
+        emojiChoises = ["","","","","","","",""]
+
         emoji = Dictionary<Int,String>()
         
         for i in cardbutton.indices{

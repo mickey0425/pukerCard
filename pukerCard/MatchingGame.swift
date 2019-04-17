@@ -10,7 +10,13 @@ import Foundation
 
 class MatchingGame {
     
-     var cards = [Card]() //var cards : Array(Card)
+    var cards = [Card]() //var cards : Array(Card)
+    
+    
+    var emojiChoises = emojiTheme()
+   
+    
+   
     
     init(numberOfPairsOfCards: Int){
         for _ in 1...numberOfPairsOfCards{
@@ -18,7 +24,12 @@ class MatchingGame {
             cards.append(card)
             cards.append(card)
         }
+        
+       
     }
+    
+    
+   
     
     
     var indexOfOneAndOnlyFaceUpCard: Int?{
@@ -82,5 +93,7 @@ class MatchingGame {
         }
         return count
     }
+    
+    
 }
 
